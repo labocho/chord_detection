@@ -25,30 +25,25 @@ inversions = Semitonal::Interval.inversions(intervals) # [[4, 5], [5, 3], [3, 4]
 chords = inversions.map{|(i1, i2)|
   chord_form = CHORD_FORMS[[i1.semitones, i2.semitones]]
   next unless chord_form
-  {
-    chord_form: chord_form,
-    root: i1.a,
-    notes: notes,
-    signaturue: i1.a
-  }
+  Semitonal::Chord.new(chord_form, i1.a, notes)
 }.compact
-pp chords
 
 chords.each do |chord|
-  root_candidates = Tonal::Pitch.candidates(chord[:root])
+  root_candidates = Tonal::Pitch.candidates(chord.root)
   root_candidates.each do |root|
-    notes = chord[:notes].select {|n| n.in_octave == root.semitones_in_octave }.map {|n|
+    puts chord.name(root)
+
+    notes = chord.notes.select {|n| n.in_octave == root.semitones_in_octave }.map {|n|
       Tonal::Pitch.candidates(n).find {|c| c.natural == root.natural }
     }
 
-    chord[:chord_form][:tones].each do |interval|
+    chord.form[:tones].each do |interval|
       note = root + Tonal::Interval.parse(interval)
 
-      notes += chord[:notes].select {|n| n.in_octave == note.semitones_in_octave }.map {|n|
+      notes += chord.notes.select {|n| n.in_octave == note.semitones_in_octave }.map {|n|
         Tonal::Pitch.candidates(n).find {|c| c.natural == note.natural }
       }
     end
-
 
     note_names_with_octave = midi_note_numbers.map {|i|
       n = i % 12 # semitones in octave
