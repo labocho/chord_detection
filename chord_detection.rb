@@ -18,35 +18,36 @@ CHORD_FORMS = {
 # end
 
 
+module Semitonal
+  class Pitch
+    include Comparable
 
-class Pitch
-  include Comparable
+    attr_reader :midi_pitch, :in_octave
 
-  attr_reader :midi_pitch, :in_octave
+    def initialize(midi_pitch)
+      @midi_pitch = midi_pitch
+      @in_octave = midi_pitch % 12
+    end
 
-  def initialize(midi_pitch)
-    @midi_pitch = midi_pitch
-    @in_octave = midi_pitch % 12
+    def <=>(other)
+      in_octave <=> other.in_octave
+    end
   end
 
-  def <=>(other)
-    in_octave <=> other.in_octave
-  end
-end
+  class Interval
+    attr_reader :a, :b, :semitones
 
-class Interval
-  attr_reader :a, :b, :semitones
-
-  def initialize(a, b)
-    @a = a
-    @b = b
-    @semitones = (b.in_octave - a.in_octave) % 12
+    def initialize(a, b)
+      @a = a
+      @b = b
+      @semitones = (b.in_octave - a.in_octave) % 12
+    end
   end
 end
 
 def interval(notes)
   (notes + [notes[0]]).each_cons(2).map do |(a, b)|
-    Interval.new(a, b)
+    Semitonal::Interval.new(a, b)
   end
 end
 
@@ -268,7 +269,7 @@ end
 # inversions = invert(intervals) # [[4, 5], [5, 3], [3, 4]]
 # pp inversions.map{|i| CHORD_FORMS[i] }
 
-notes = [57, 60, 64].map {|n| Pitch.new(n) } # a, c, e
+notes = [57, 60, 64].map {|n| Semitonal::Pitch.new(n) } # a, c, e
 # regularized = notes.map {|n| n % 12 } # [9, 0, 4]
 sorted = notes.sort # [0, 4, 9]
 intervals = interval(sorted) # [4, 5, 3]
