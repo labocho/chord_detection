@@ -14,8 +14,10 @@ CHORD_FORMS = {
 require_relative "semitonal"
 require_relative "tonal"
 
-notes = [57, 60, 64].map {|n| Semitonal::Pitch.new(n) } # a, c, e
-# regularized = notes.map {|n| n % 12 } # [9, 0, 4]
+midi_note_numbers = [57, 60, 64]
+
+
+notes = midi_note_numbers.map {|n| Semitonal::Pitch.new(n) } # a, c, e
 sorted = notes.sort # [0, 4, 9]
 intervals = Semitonal::Interval.intervals_of(sorted) # [4, 5, 3]
 inversions = Semitonal::Interval.inversions(intervals) # [[4, 5], [5, 3], [3, 4]]
@@ -47,6 +49,14 @@ chords.each do |chord|
       }
     end
 
-    puts notes.map(&:to_s)
+
+    note_names_with_octave = midi_note_numbers.map {|i|
+      n = i % 12 # semitones in octave
+      octave = i / 12 - 1 # middle C = 4
+
+      note = notes.find {|tonal_pitch| tonal_pitch.semitones_in_octave == n }
+      "#{note}#{octave}"
+    }
+    pp note_names_with_octave
   end
 end

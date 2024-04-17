@@ -2,10 +2,9 @@ module Semitonal
   class Pitch
     include Comparable
 
-    attr_reader :midi_pitch, :in_octave
+    attr_reader :in_octave
 
     def initialize(midi_pitch)
-      @midi_pitch = midi_pitch
       @in_octave = midi_pitch % 12
     end
 

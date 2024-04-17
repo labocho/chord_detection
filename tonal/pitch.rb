@@ -1,90 +1,88 @@
 module Tonal
   class Pitch
-    attr_reader :natural, :displacement, :octave
+    attr_reader :natural, :displacement
 
     def self.candidates(semitonal_pitch)
-      n = semitonal_pitch.midi_pitch / 12 - 1 # middle C を C4 とする
-
       candidates = case semitonal_pitch.in_octave
       when 0
         [
-          "B###{n - 1}",
-          "C#{n}",
-          "Dbb#{n}",
+          "B#",
+          "C",
+          "Dbb",
         ]
       when 1
         [
-          "C##{n}",
-          "Db#{n}",
+          "C#",
+          "Db",
         ]
       when 2
         [
-          "C###{n}",
-          "D#{n}",
-          "Ebb#{n}",
+          "C##",
+          "D",
+          "Ebb",
         ]
       when 3
         [
-          "D##{n}",
-          "Eb#{n}",
+          "D#",
+          "Eb",
         ]
       when 4
         [
-          "D###{n}",
-          "E#{n}",
-          "Fb#{n}",
+          "D##",
+          "E",
+          "Fb",
         ]
       when 5
         [
-          "E##{n}",
-          "F#{n}",
-          "Gbb#{n}",
+          "E#",
+          "F",
+          "Gbb",
         ]
       when 6
         [
-          "E###{n}",
-          "F##{n}",
-          "Gb#{n}",
+          "E##",
+          "F#",
+          "Gb",
         ]
       when 7
         [
-          "F###{n}",
-          "G#{n}",
-          "Abb#{n}",
+          "F##",
+          "G",
+          "Abb",
         ]
       when 8
         [
-          "G##{n}",
-          "Ab#{n}",
+          "G#",
+          "Ab",
         ]
       when 9
         [
-          "G###{n}",
-          "A#{n}",
-          "Bbb#{n}",
+          "G##",
+          "A",
+          "Bbb",
         ]
       when 10
         [
-          "A##{n}",
-          "Bb#{n}",
-          "Cbb#{n + 1}",
+          "A#",
+          "Bb",
+          "Cbb",
         ]
       when 11
         [
-          "A###{n}",
-          "B#{n}",
-          "Cb#{n + 1}",
+          "A##",
+          "B",
+          "Cb",
         ]
       end
       candidates.map {|s| parse(s) }
     end
 
     def self.parse(s)
-      unless s =~ /\A([A-G])(|#|##|b|bb)(\d+)\z/
+      unless s =~ /\A([A-G])(|#|##|b|bb)\z/
         raise "Could not parse: #{s.inspect}"
       end
 
-      natural, displacement, octave = $~.captures
+      natural, displacement = $~.captures
 
       d = case displacement
       when "bb"
@@ -99,17 +97,16 @@ module Tonal
         2
       end
 
-      new(natural, d, octave.to_i)
+      new(natural, d)
     end
 
     # e.g. Pitch.new("C", -2, 1)
-    def initialize(natural, displacement, octave)
+    def initialize(natural, displacement)
       @natural = natural.is_a?(Note) ? natural : Note.find(natural)
       @displacement = displacement
-      @octave = octave
     end
 
-    def midi_pitch
+    def semitones_in_octave
       i = case natural.name
       when "C"
         0
@@ -127,11 +124,7 @@ module Tonal
         11
       end
 
-      i + displacement + (octave + 1) * 12
-    end
-
-    def semitones_in_octave
-      midi_pitch % 12
+      (i + displacement) % 12
     end
 
     def +(interval)
@@ -139,7 +132,7 @@ module Tonal
     end
 
     def to_s
-      "#{natural}#{displacement_text}#{octave}"
+      "#{natural}#{displacement_text}"
     end
 
     def displacement_text
