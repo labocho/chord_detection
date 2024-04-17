@@ -11,42 +11,15 @@ CHORD_FORMS = {
   },
 }
 
-# def interval(notes)
-#   (notes + [notes[0]]).each_cons(2).map do |(a, b)|
-#     (b - a) % 12
-#   end
-# end
-
 require_relative "semitonal"
 require_relative "tonal"
-
-def interval(notes)
-  (notes + [notes[0]]).each_cons(2).map do |(a, b)|
-    Semitonal::Interval.new(a, b)
-  end
-end
-
-def invert(intervals)
-  n = intervals.size
-  n.times.map do |root|
-    (n - 1).times.map do |j|
-      intervals[(root + j) % n]
-    end
-  end
-end
-
-# notes = [57, 60, 64] # a, c, e
-# regularized = notes.map {|n| n % 12 } # [9, 0, 4]
-# sorted = regularized.sort # [0, 4, 9]
-# intervals = interval(sorted) # [4, 5, 3]
-# inversions = invert(intervals) # [[4, 5], [5, 3], [3, 4]]
-# pp inversions.map{|i| CHORD_FORMS[i] }
 
 notes = [57, 60, 64].map {|n| Semitonal::Pitch.new(n) } # a, c, e
 # regularized = notes.map {|n| n % 12 } # [9, 0, 4]
 sorted = notes.sort # [0, 4, 9]
-intervals = interval(sorted) # [4, 5, 3]
-inversions = invert(intervals) # [[4, 5], [5, 3], [3, 4]]
+intervals = Semitonal::Interval.intervals_of(sorted) # [4, 5, 3]
+inversions = Semitonal::Interval.inversions(intervals) # [[4, 5], [5, 3], [3, 4]]
+
 chords = inversions.map{|(i1, i2)|
   chord_form = CHORD_FORMS[[i1.semitones, i2.semitones]]
   next unless chord_form
