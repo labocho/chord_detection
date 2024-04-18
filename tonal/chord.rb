@@ -9,7 +9,7 @@ module Tonal
         n = i % 12 # semitones in octave
         octave = i / 12 - 1 # middle C = 4
 
-        note = notes.find {|pitch| pitch.semitones_in_octave == n }
+        note = notes.find {|note| note.semitones == n }
         "#{note}#{octave}"
       }
     end

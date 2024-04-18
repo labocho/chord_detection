@@ -13,20 +13,19 @@ module Semitonal
       "#{root_name}#{form[:signature]}"
     end
 
-    def to_tonal_chords(midi_note_numbers)
-      warn "to_tonal_chods called"
+    def to_tonal_chords
       tonal_chords = []
-      root_candidates = Tonal::Pitch.candidates(root)
+      root_candidates = Tonal::Note.candidates(root)
       root_candidates.each do |root|
-        tonal_notes = notes.select {|n| n.value == root.semitones_in_octave }.map {|n|
-          Tonal::Pitch.candidates(n).find {|c| c.natural == root.natural }
+        tonal_notes = notes.select {|n| n.value == root.semitones }.map {|n|
+          Tonal::Note.candidates(n).find {|c| c.natural == root.natural }
         }
 
         form.intervals.each do |interval|
           note = root + interval
 
-          tonal_notes += notes.select {|n| n.value == note.semitones_in_octave }.map {|n|
-            Tonal::Pitch.candidates(n).find {|c| c.natural == note.natural }
+          tonal_notes += notes.select {|n| n.value == note.semitones }.map {|n|
+            Tonal::Note.candidates(n).find {|c| c.natural == note.natural }
           }
         end
 

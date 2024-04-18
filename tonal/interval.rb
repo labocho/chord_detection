@@ -6,10 +6,14 @@ module Tonal
       INTERVALS.fetch(s)
     end
 
-    def add(pitch)
-      Pitch.new(
-        pitch.natural + (degree - 1),
-        pitch.displacement + displacements[Note::NAMES.index(pitch.natural.name)],
+    def add(note)
+      index_of_natural = Note::NAMES.index(note.natural)
+      natural = Note::NAMES[
+        (index_of_natural + degree - 1) % 7
+      ]
+      Note.new(
+        natural,
+        note.displacement + displacements[index_of_natural],
       )
     end
   end
