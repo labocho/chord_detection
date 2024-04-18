@@ -13,5 +13,9 @@ module Tonal
     end
   end
 
-  NOTES = %w(C D E F G A B).map {|s| Note.new(s).freeze }.freeze
+  class Note
+    NAMES = %w(C D E F G A B).map(&:freeze).freeze
+  end
+
+  NOTES = Note::NAMES.map {|s| Note.new(s).freeze }.freeze
 end

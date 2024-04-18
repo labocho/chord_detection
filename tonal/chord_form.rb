@@ -23,7 +23,7 @@ module Tonal
   }
 
   CHORD_FORMS_BY_SEMITONES = CHORD_FORMS.inject({}) {|h, chord_form|
-    intervals_from_root = chord_form.intervals.map(&:semitonal)
+    intervals_from_root = chord_form.intervals.map(&:semitones)
 
     intervals_between_tones = []
     intervals_from_root.inject(0) {|n, interval|
