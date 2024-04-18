@@ -2,7 +2,7 @@ module Semitonal
   Chord = Struct.new(:form, :root, :notes) do
     def self.candidates_from_midi_note_numbers(midi_note_numbers)
       notes = midi_note_numbers.map {|n| Note.new(n) } # a, c, e
-      sorted = notes.sort # [0, 4, 9]
+      sorted = notes.sort.uniq {|note| note.value } # [0, 4, 9]
       intervals = Interval.intervals_of(sorted) # [4, 5, 3]
       inversions = Interval.inversions(intervals) # [[4, 5], [5, 3], [3, 4]]
       candidates_from_inversions(inversions, notes)

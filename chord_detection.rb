@@ -2,7 +2,7 @@
 require_relative "semitonal"
 require_relative "tonal"
 
-midi_note_numbers = [57, 60, 64]
+midi_note_numbers = [57, 60, 64, 48]
 chords = Semitonal::Chord.candidates_from_midi_note_numbers(midi_note_numbers)
 
 chords.each do |chord|
