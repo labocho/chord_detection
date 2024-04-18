@@ -5,7 +5,7 @@ module Semitonal
       sorted = notes.sort.uniq {|note| note.value } # [0, 4, 9]
       intervals = Interval.intervals_of(sorted) # [4, 5, 3]
       inversions = Interval.inversions(intervals) # [[4, 5], [5, 3], [3, 4]]
-      candidates_from_inversions(inversions, notes)
+      candidates_from_inversions(inversions, sorted)
     end
 
     def self.candidates_from_inversions(inversions, notes)

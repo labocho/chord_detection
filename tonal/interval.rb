@@ -7,13 +7,13 @@ module Tonal
     end
 
     def add(note)
-      index_of_natural = Note::NAMES.index(note.natural)
+      n = note.index_of_natural
       natural = Note::NAMES[
-        (index_of_natural + degree - 1) % 7
+        (n + degree - 1) % 7
       ]
       Note.new(
         natural,
-        note.displacement + displacements[index_of_natural],
+        note.displacement + displacements[n],
       )
     end
   end

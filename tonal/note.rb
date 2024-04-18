@@ -129,6 +129,10 @@ module Tonal
       (i + displacement) % 12
     end
 
+    def index_of_natural
+      NAMES.index(natural)
+    end
+
     def +(interval)
       interval.add(self)
     end
