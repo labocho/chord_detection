@@ -1,15 +1,15 @@
 module Semitonal
-  class Pitch
+  class Note
     include Comparable
 
-    attr_reader :in_octave
+    attr_reader :value
 
     def initialize(midi_pitch)
-      @in_octave = midi_pitch % 12
+      @value = midi_pitch % 12
     end
 
     def <=>(other)
-      in_octave <=> other.in_octave
+      value <=> other.value
     end
   end
 end

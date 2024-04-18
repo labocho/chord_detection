@@ -4,7 +4,7 @@ require_relative "tonal"
 
 midi_note_numbers = [57, 60, 64]
 
-notes = midi_note_numbers.map {|n| Semitonal::Pitch.new(n) } # a, c, e
+notes = midi_note_numbers.map {|n| Semitonal::Note.new(n) } # a, c, e
 sorted = notes.sort # [0, 4, 9]
 intervals = Semitonal::Interval.intervals_of(sorted) # [4, 5, 3]
 inversions = Semitonal::Interval.inversions(intervals) # [[4, 5], [5, 3], [3, 4]]

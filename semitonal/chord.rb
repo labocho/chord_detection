@@ -18,14 +18,14 @@ module Semitonal
       tonal_chords = []
       root_candidates = Tonal::Pitch.candidates(root)
       root_candidates.each do |root|
-        tonal_notes = notes.select {|n| n.in_octave == root.semitones_in_octave }.map {|n|
+        tonal_notes = notes.select {|n| n.value == root.semitones_in_octave }.map {|n|
           Tonal::Pitch.candidates(n).find {|c| c.natural == root.natural }
         }
 
         form.intervals.each do |interval|
           note = root + interval
 
-          tonal_notes += notes.select {|n| n.in_octave == note.semitones_in_octave }.map {|n|
+          tonal_notes += notes.select {|n| n.value == note.semitones_in_octave }.map {|n|
             Tonal::Pitch.candidates(n).find {|c| c.natural == note.natural }
           }
         end

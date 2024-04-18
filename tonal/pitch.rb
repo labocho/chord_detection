@@ -3,7 +3,7 @@ module Tonal
     attr_reader :natural, :displacement
 
     def self.candidates(semitonal_pitch)
-      candidates = case semitonal_pitch.in_octave
+      candidates = case semitonal_pitch.value
       when 0
         [
           "B#",

@@ -57,7 +57,7 @@ module Semitonal
     def initialize(a, b)
       @a = a
       @b = b
-      @semitones = (b.in_octave - a.in_octave) % 12
+      @semitones = (b.value - a.value) % 12
     end
   end
 end
