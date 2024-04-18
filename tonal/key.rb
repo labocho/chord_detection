@@ -13,6 +13,8 @@ module Tonal
     {key: "G", name: "G major", displacements: [ 0,  0,  0,  1,  0,  0,  0]},
     {key: "D", name: "D major", displacements: [ 1,  0,  0,  1,  0,  0,  0]},
     {key: "A", name: "A major", displacements: [ 1,  0,  0,  1,  1,  0,  0]},
+
+    {key: "c", name: "C minor", displacements: [ 0,  0, -1,  0,  0, -1, -1]},
   ].inject({}) {|h, definition|
     h[definition[:key]] = Key.new(**definition)
     h

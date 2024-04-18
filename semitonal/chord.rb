@@ -9,11 +9,11 @@ module Semitonal
     end
 
     def self.candidates_from_inversions(inversions, notes)
-      inversions.map{|(i1, i2)|
-        chord_form = Tonal::CHORD_FORMS_BY_SEMITONES[[i1.semitones, i2.semitones]]
+      inversions.map{|intervals|
+        chord_form = Tonal::CHORD_FORMS_BY_SEMITONES[intervals.map(&:semitones)]
         next unless chord_form
 
-        Semitonal::Chord.new(chord_form, i1.a, notes)
+        Semitonal::Chord.new(chord_form, intervals.first.a, notes)
       }.compact
     end
 
@@ -25,17 +25,21 @@ module Semitonal
       tonal_chords = []
       root_candidates = Tonal::Note.candidates(root)
       root_candidates.each do |root|
-        tonal_notes = notes.select {|n| n.value == root.semitones }.map {|n|
+        tonal_root = notes.find {|n| n.value == root.semitones }.yield_self {|n|
           Tonal::Note.candidates(n).find {|c| c.natural == root.natural }
         }
 
+        tonal_notes = [tonal_root]
         form.intervals.each do |interval|
           note = root + interval
 
           tonal_notes += notes.select {|n| n.value == note.semitones }.map {|n|
+            # 重減、重増を含む場合 nil になる
             Tonal::Note.candidates(n).find {|c| c.natural == note.natural }
           }
         end
+
+        next if tonal_notes.any?(&:nil?)
 
         tonal_chords << Tonal::Chord.new(form, root, tonal_notes)
       end

@@ -5,6 +5,8 @@ require "json"
 
 key = Tonal::KEYS["C"]
 midi_note_numbers = [57, 60, 64, 48]
+# key = Tonal::KEYS["c"]
+# midi_note_numbers = [59, 62, 65, 68]
 chords = Semitonal::Chord.candidates_from_midi_note_numbers(midi_note_numbers)
 
 chords.each do |chord|
