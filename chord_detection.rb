@@ -23,8 +23,9 @@ intervals = Semitonal::Interval.intervals_of(sorted) # [4, 5, 3]
 inversions = Semitonal::Interval.inversions(intervals) # [[4, 5], [5, 3], [3, 4]]
 
 chords = inversions.map{|(i1, i2)|
-  chord_form = CHORD_FORMS[[i1.semitones, i2.semitones]]
+  chord_form = Tonal::CHORD_FORMS_BY_SEMITONES[[i1.semitones, i2.semitones]]
   next unless chord_form
+
   Semitonal::Chord.new(chord_form, i1.a, notes)
 }.compact
 
@@ -37,8 +38,8 @@ chords.each do |chord|
       Tonal::Pitch.candidates(n).find {|c| c.natural == root.natural }
     }
 
-    chord.form[:tones].each do |interval|
-      note = root + Tonal::Interval.parse(interval)
+    chord.form.intervals.each do |interval|
+      note = root + interval
 
       notes += chord.notes.select {|n| n.in_octave == note.semitones_in_octave }.map {|n|
         Tonal::Pitch.candidates(n).find {|c| c.natural == note.natural }

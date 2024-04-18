@@ -1,5 +1,40 @@
 module Tonal
   class Interval
+    # 略記は https://en.wikipedia.org/wiki/Interval_(music) 参照
+    SEMITONAL = {
+      # 1st
+      "P1" => 0,
+      "A1" => 1,
+      # 2nd
+      "d2" => 0,
+      "m2" => 1,
+      "M2" => 2,
+      "A2" => 3,
+      # 3rd
+      "d3" => 2,
+      "m3" => 3,
+      "M3" => 4,
+      "A3" => 5,
+      # 4th
+      "d4" => 4,
+      "P4" => 5,
+      "A4" => 6,
+      # 5th
+      "d5" => 6,
+      "P5" => 7,
+      "A5" => 8,
+      # 6th
+      "d6" => 7,
+      "m6" => 8,
+      "M6" => 9,
+      "A6" => 10,
+      # 7th
+      "d7" => 9,
+      "m7" => 10,
+      "M7" => 11,
+      "A7" => 12,
+    }.transform_keys(&:freeze).freeze
+
     attr_reader :value
 
     def self.parse(s)
@@ -14,7 +49,7 @@ module Tonal
       case value
       when ""
         pitch
-      when "aug1"
+      when "A1"
         Pitch.new(pitch.natural, pitch.displacement + 1)
       when "m3"
         case pitch.natural.name
@@ -33,6 +68,10 @@ module Tonal
       else
         raise NotImplementedError, "Cannot add `#{value}`"
       end
+    end
+
+    def semitonal
+      SEMITONAL.fetch(value)
     end
   end
 end
